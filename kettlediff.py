@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 """Module to normalize .ktr and .kjb files.
 
 When using PDI, it is possible for certain XML tags (like hops and steps) that
@@ -42,12 +43,11 @@ import io
 import re
 import os
 import sys
-import html
 import difflib
-import pathlib
 import zipfile
 import argparse
 from xml.dom import minidom
+from xml.sax.saxutils import unescape
 
 # if "lxml" in sys.modules:
 try:
@@ -110,7 +110,7 @@ def data_cleaning(data, mode):
     """Fixing known differences in input files that are caused by differing
     versions of pdi but don't result in functional changing of the file."""
     # return data
-    data = html.unescape(data)
+    data = unescape(data)
     if mode == "PDI":
         # Issue: Changing whitespaces on empty tags
         data = re.sub(r"<([^>]*)>\r?\n?\s*</\1>", r"<\1> </\1>", data)
@@ -306,9 +306,9 @@ def main():
         "is not available, a second file can be specified to simulate "
         "git diff's output.")
     parser.add_argument("path", help="Path of the file that should get "
-                        "converted to text.", type=pathlib.Path)
+                        "converted to text.")
     parser.add_argument("path2", nargs="?", help="Path of second file to "
-                        "compare with the first file.", type=pathlib.Path)
+                        "compare with the first file.")
     parser.add_argument(
         "-m", "--mode", default=None, choices=["xlsx", "prpt", "ktr", "kjb"],
         help="Use a specific conversion method, "
@@ -327,7 +327,7 @@ def main():
     path = arguments.path
     path2 = arguments.path2
     if arguments.mode is None:
-        function = functions.get(path.suffix.lower()[1:], None)
+        function = functions.get(os.path.splitext(path)[1][1:], None)
     else:
         function = functions.get(arguments.mode, None)
     if function is None:
