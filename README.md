@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/Talon24/kettlediff.svg?branch=master)](https://travis-ci.com/Talon24/kettlediff)
 # Kettlediff
 Diff library for git (or other version control systems or standalone) to view changes in Pentaho Data Integration and Pentaho Report Designer files.
 
