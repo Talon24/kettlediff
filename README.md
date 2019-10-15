@@ -18,7 +18,7 @@ When in steps, the hunk header will show the name of the step written in the **n
 The line numbers found by git diff won't match the lines in the files as the XML will be changed to keep steps, etc. in a diffable order.
 
 ### Requirements
-*Kettlediff* will run on the python versions 2 and 3.
+*Kettlediff* will run on python versions 3, but there is a python2-compatible release `py2_1.0.0`.
 
 There are no external modules needed for it to run. However, if you have **lxml** installed on your machine, it will use that instead of the built-in **xml** module.
 
