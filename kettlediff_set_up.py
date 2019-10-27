@@ -12,7 +12,7 @@ HOME = os.path.expanduser("~")
 
 def parse_config(args):  # pylint: disable=R0912
     """parses the gitconfig file."""
-    configpath = os.path.join(HOME, ".gitconfig_2")
+    configpath = os.path.join(HOME, ".gitconfig")
     # config = configobj.ConfigObj(configpath, interpolation=None, indent_type="\t")
     config = configparser.ConfigParser(interpolation=None)
     config.read(configpath)
@@ -51,16 +51,31 @@ def parse_config(args):  # pylint: disable=R0912
     else:
         print("already diff for prpt in .gitconfig!")
 
+    if 'diff "xlsx"' not in config:
+        config['diff "xlsx"'] = {}
+    if "textconv" not in config['diff "xlsx"'] and \
+            "xfuncname" not in config['diff "xlsx"']:
+        if args.exe:
+            config['diff "xlsx"']["textconv"] = "\"'{}'\"".format(
+                os.path.join(os.getcwd(), "kettlediff.exe").replace("\\", "/"))
+        else:
+            config['diff "xlsx"']["textconv"] = "python \"'{}'\"".format(
+                os.path.join(os.getcwd(), "kettlediff.py").replace("\\", "/"))
+        config['diff "xlsx"']["xfuncname"] = ".*------ Sheet: .*"
+    else:
+        print("already diff for xlsx in .gitconfig!")
+
+    sections = [section for section in config if section != "DEFAULT"]
     if not args.write:
         print("Template for .gitconfig:\n---------------------------")
-        for section in [section for section in config if config[section] != "DEFAULT"]:
+        for section in sections:
             print("[{}]".format(section))
             for key, item in config[section].items():
                 print("\t{} = {}".format(key, item))
         print("---------------------------")
     else:
         with open(configpath, "w") as file:
-            for section in config:
+            for section in sections:
                 print("[{}]".format(section), file=file)
                 for key, item in config[section].items():
                     print("\t{} = {}".format(key, item), file=file)
@@ -87,6 +102,10 @@ def parse_attribs(attributespath, args):  # pylint: disable=R0912
                 new.append("*.kjb diff=kettle")
             else:
                 print("kjb already in attributesfile!")
+            if "*.xlsx" not in text:
+                new.append("*.xlsx diff=xlsx")
+            else:
+                print("xlsx already in attributesfile!")
     else:
         out = []
         new = ["*.prpt diff=prpt", "*.ktr diff=kettle",
@@ -108,7 +127,6 @@ def main():
     parser.add_argument("--exe", action="store_true", dest="exe",
                         help="specify if using the executable instad the python file")
     args = parser.parse_args()
-    print(args)
     if os.name == "nt":
         attributespath = parse_config(args)
         parse_attribs(attributespath, args)
