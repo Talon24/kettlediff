@@ -1,4 +1,8 @@
 [![Build Status](https://travis-ci.com/Talon24/kettlediff.svg?branch=master)](https://travis-ci.com/Talon24/kettlediff)
+[![Updates](https://pyup.io/repos/github/Talon24/kettlediff/shield.svg)](https://pyup.io/repos/github/Talon24/kettlediff/)
+[![Python 3](https://pyup.io/repos/github/Talon24/kettlediff/python-3-shield.svg)](https://pyup.io/repos/github/Talon24/kettlediff/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-purple.svg)]()
+
 # Kettlediff
 Diff library for git (or other version control systems or standalone) to view changes in Pentaho Data Integration and Pentaho Report Designer files.
 
