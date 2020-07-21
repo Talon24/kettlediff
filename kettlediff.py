@@ -260,7 +260,8 @@ def xlsxdiff2(path):
         strings = [i[0].text for i in tree]
 
         tree = ET.fromstring(zipref.open("xl/workbook.xml").read())
-        titles = {i.attrib["sheetId"]: i.attrib["name"] for i in tree[5]}
+        sheets = [i for i in tree if i.tag.endswith("sheets")][0]
+        titles = {i.attrib["sheetId"]: i.attrib["name"] for i in sheets}
 
         for file in zipref.namelist():  # Path of all files in archive
             if file.startswith("xl/worksheets") and file.endswith("xml"):
