@@ -1,2 +1,2 @@
-lxml==5.4.0
+lxml==6.0.0
 colorama==0.4.6
